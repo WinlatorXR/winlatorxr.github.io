@@ -8,18 +8,14 @@ a, h1, h2, li, p {
     color: #FFFFFF;
 }
 
-footer {
-    color: #FFFFFF;
-}
-
 iframe {
     width: 95%;
-    height: 80vh;
+    height: 89vh;
     border: none;
 }
 
 nav {
-   height: 8%;
+   height: 10%;
 }
 
 nav a {
