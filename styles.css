@@ -4,7 +4,7 @@ html, body {
     background-color:#2F0B81;
 }
 
-a, h1, h2, li, p {
+a, h1, h2, h3, li, p {
     color: #FFFFFF;
 }
 
@@ -30,4 +30,88 @@ nav a {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.floatcontainer {
+	overflow: auto;
+}
+
+.compatmatrix {
+	color: #FFF;
+	text-align:center;
+	width:70%;
+}
+
+.compatmatrix th {
+	font-weight: bold;
+	font-size: 14pt;
+	position: sticky;
+    top: 0;
+    z-index: 1;
+	background-color: #330f85;
+}
+
+.compatmatrix tbody tr:nth-child(odd) {
+	background-color: #2F0B81;
+}
+
+.compatmatrix tbody tr:nth-child(even) {
+	background-color: #4218a1;
+}
+
+.compatmatrix sup {
+    vertical-align: super;
+    font-size: smaller;
+	color: #777;
+	margin-right:-10px;
+	font-weight: bold;
+}
+
+.knowncompat {
+	font-weight:bold;
+	color: #0F0;
+}
+
+.incompat {
+	font-weight:bold;
+	color: #F00;
+}
+
+.unknowncompat {
+	font-style:italic;
+}
+
+.matrixsearch {
+	width: 30%;
+	font-weight:bold;
+	font-size: 12pt;
+	margin-bottom: 10px;
+}
+
+.compatmain {
+	float: left;
+	width: 70%;
+}
+
+.rightfloatpanel {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 20%;
+	background-color: #391d99;
+	padding: 5px;
+	margin-right:30px;
+}
+
+.clear {
+	clear:both;
+}
+
+.code {
+	color: #FFF;
+	background-color: #333;
+	padding-top:5px;
+	padding-bottom:5px;
+	font-size:10pt;
+	line-height:25px;
 }

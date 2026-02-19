@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://www.w3.org/2005/10/profile">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <meta http-equiv="Content-Language" content="en" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="author" content="WinlatorXR" />
+  <meta name="description" content="WinlatorXR" />
+  <meta name="robots" content="index,nofollow" />
+  <meta name="copyright" content="WinlatorXR" />
+  <link rel="stylesheet" href="styles.css">
+  <title>WinlatorXR</title>
+</head>
+<body>
+	<table>
+		<tr>
+		  <td width="33%">
+			<img src="img/winlatorxr_api.jpeg" width="100%">
+		  </td>
+		  <td width="67%">
+			<p>
+			  <strong>WinlatorXR's API</strong> provides 6DOF tracking data and controller inputs over UDP
+			  for use in games and mods within a container.
+			</p>
+
+			<p>
+			  This is an experimental and evolving feature of WinlatorXR, and as such maintains various versions of the API for longterm compatibility. <br/>
+			  Currently this API must be used on a per-game or per-mod basis, as it is not a total replacement for the OpenXR runtime at this time. <br/>
+			  Some features of this API include:
+			</p>
+
+			<ul>
+			  <li><strong>Render in 3D</strong> – WinlatorXR API supports rendering 3D content via both Side-By-Side (SBS) and Alternate Eye Rendering (AER) methods.</li>
+			  <li><strong>Controller Haptics</strong> – UDP data returned from a game or app using the WinlatorXR API can trigger haptics in the player controllers.</li>
+			  <li><strong>Monocular VR</strong> – For content that cannot render in 3D, 6DOF tracking can still be used for a monocular VR experience.</li>
+			  <li><strong>VR in a Window</strong> – 6DOF tracking data can also be used without needing to render a fully immersive display, for a hybrid gaming experience.</li>
+			</ul>
+		  </td>
+		</tr>
+	</table>
+
+	<div>
+		<h2 class="heading-element" tabindex="-1">
+			Required changes for the Windows app
+		</h2>
+		<a class="anchor" target="_blank" rel="noopener noreferrer" href="https://github.com/WinlatorXR/WinlatorXR#required-changes-for-the-windows-app" id="user-content-required-changes-for-the-windows-app" aria-label="Permalink: Required changes for the Windows app"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a>
+	</div>
+	<ol>
+		<li>
+			WinlatorXR checks for Z:\tmp\xr\version file and read the API version which should be used
+		</li>
+		<li>
+			The data are sent using UDP protocol on localhost:7872 as ASCII string in order which can be found below.
+		</li>
+		<li>
+			It is important to keep the Windows app as much in sync as possible, ideally holding renderer until HMD_SYNC changes.
+		</li>
+		<li>
+			Windows app have to render value of HMD_SYNC as shade of red (in sRGB colorspace) into top-left corner.
+		</li>
+		<li>
+			Information about used headset is written into Z:\tmp\xr\system (manufacturer, product, Android version, security patch version).
+		</li>
+	</ol>
+	<div>
+		<h2 class="heading-element" tabindex="-1">
+			XrAPI 0.3 specification
+		</h2>
+		<a class="anchor" target="_blank" rel="noopener noreferrer" href="https://github.com/WinlatorXR/WinlatorXR#xrapi-03-specification" id="user-content-xrapi-03-specification" aria-label="Permalink: XrAPI 0.3 specification"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a>
+		<p>
+			The Windows app/game has to sent data on localhost:7278 as string of float numbers separated by space:
+		</p>
+	</div>
+	<div>
+		<span class="code">L_HAPTICS, R_HAPTICS, MODE_VR, MODE_3D, HMD_FOVX, HMD_FOVY
+		</span>
+	</div>
+	<ul>
+		<li>
+			The haptic values indicates length in frames how long should controller vibrate (the first value is for left controller and the second for the right one).
+		</li>
+		<li>
+			The VR mode is 1 to enable, 0 to disable. To receive HMD and controllers data, the VR mode has to be enabled.
+		</li>
+		<li>
+			The 3D mode is 2 for alternate-eye-rendering, 1 for side-by-side, 0 for flat screen, -1 to give user the control.
+		</li>
+		<li>
+			If FOV values are higher than 1 then it forces a custom Field-of-View values in degrees. This is need by apps and games where the variable FOV isn't supported.
+		</li>
+	</ul>
+	<p>
+		3D modes:
+	</p>
+	<ul>
+		<li>
+			alternate-eye-rendering - set blue framesync pixel to 0 when rendering left eye, 255 when rendering right eye, quickly swapping left and right eye brings 3D effect
+		</li>
+		<li>
+			side-by-side - the left half of the container is drawn to left eye and right half to right eye
+		</li>
+	</ul>
+	<p>
+		The data transfered over UDP starts with an array of float numbers separated by space, the values are:
+	</p>
+	<div>
+		<span class="code">L_QX, L_QY, L_QZ, L_QW, L_THUMBSTICK_X, L_THUMBSTICK_Y, L_X, L_Y, L_Z, 
+		R_QX, R_QY, R_QZ, R_QW, R_THUMBSTICK_X, R_THUMBSTICK_Y, R_X, R_Y, R_Z, 
+		HMD_QX, HMD_QY, HMD_QZ, HMD_QW, HMD_X, HMD_Y, HMD_Z, HMD_IPD, HMD_FOVX, HMD_FOVY, HMD_SYNC
+		</span>
+	</div>
+	<p>
+		Next is a string containing characters T (for TRUE) and F (for FALSE). This string represents the controller buttons in order:
+	</p>
+	<div>
+		<span class="code">L_GRIP, L_MENU, L_THUMBSTICK_PRESS, L_THUMBSTICK_LEFT, L_THUMBSTICK_RIGHT, L_THUMBSTICK_UP, L_THUMBSTICK_DOWN, L_TRIGGER, L_X, L_Y,
+		R_A, R_B, R_GRIP, R_THUMBSTICK_PRESS, R_THUMBSTICK_LEFT, R_THUMBSTICK_RIGHT, R_THUMBSTICK_UP, R_THUMBSTICK_DOWN, R_TRIGGER
+		</span>
+	</div>
+	<p>
+		Next is a string containing characters T (for TRUE) and F (for FALSE). This string represents the XR flags in order:
+	</p>
+	<div>
+		<span class="code">Immersive, SBS
+		</span>
+	</div>
+	<div>
+		<h2 class="heading-element" tabindex="-1">
+			Code examples
+		</h2>
+		<a class="anchor" target="_blank" rel="noopener noreferrer" href="https://github.com/WinlatorXR/WinlatorXR#code-examples" id="user-content-code-examples" aria-label="Permalink: Code examples"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a>
+	</div>
+	<ul>
+		<li>
+			<a target="_blank" rel="noopener noreferrer" href="https://github.com/bigelod/SixDOFinator_MinimalProject">SixDOFinator_MinimalProject</a> - Unity sample implementation (minimal project EXE, C#)
+		</li>
+		<li>
+			<a target="_blank" rel="noopener noreferrer" href="https://github.com/bigelod/SixDOFinator_SampleProject">SixDOFinator_SampleProject</a> - Unity sample implementation (full project EXE, C#)
+		</li>
+		<li>
+			<a target="_blank" rel="noopener noreferrer" href="https://github.com/WinlatorXR/opentrackWXR">opentrackWXR</a> - A fork of Opentrack to send 6DOF data to TrackIR compatible games (full project EXE, C++)
+		</li>
+		<li>
+			<a target="_blank" rel="noopener noreferrer" href="https://github.com/WinlatorXR/HaloCEWXR">HWXR</a> - A fork of the Halo CE PCVR mod to support the WinlatorXR API (mod DLL, C++)
+		</li>
+	</ul>
+	<center>
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/aPVFDYeOwXw?si=K3QUILYvzwA3l2qc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+	</center>
+</body>
+</html>
