@@ -111,6 +111,8 @@ function createTableFromJson(dataFileName, containerID, tableID) {
 			var rowRedditURLs = [];
 			
 			const tableBody = table.createTBody();
+			
+			rows.sort((a, b) => a.name.localeCompare(b.name));
 				
 			Object.keys(rows).forEach(key => {
 				const value = rows[key];
