@@ -14,10 +14,10 @@
 <body>
 	<table>
 		<tr>
-		  <td width="33%">
-			<img src="img/winlatorxr_api.jpeg" width="100%">
+		  <td width="50%">
+			<img src="img/winlatorxr_api.png" width="100%">
 		  </td>
-		  <td width="67%">
+		  <td width="50%">
 			<p>
 			  <strong>WinlatorXR's API</strong> provides 6DOF tracking data and controller inputs over UDP
 			  for use in games and mods within a container.
@@ -43,7 +43,6 @@
 		<h2 class="heading-element" tabindex="-1">
 			Required changes for the Windows app
 		</h2>
-		<a class="anchor" target="_blank" rel="noopener noreferrer" href="https://github.com/WinlatorXR/WinlatorXR#required-changes-for-the-windows-app" id="user-content-required-changes-for-the-windows-app" aria-label="Permalink: Required changes for the Windows app"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a>
 	</div>
 	<ol>
 		<li>
@@ -62,73 +61,146 @@
 			Information about used headset is written into Z:\tmp\xr\system (manufacturer, product, Android version, security patch version).
 		</li>
 	</ol>
+
+	<center>
+		<img src="img/winlatorxr_pcvr.png" width="67%"><br/>
+		<p>The major difference between PCVR and WinlatorXR API</p><br/>
+	</center>
+
 	<div>
 		<h2 class="heading-element" tabindex="-1">
 			XrAPI 0.3 specification
 		</h2>
-		<a class="anchor" target="_blank" rel="noopener noreferrer" href="https://github.com/WinlatorXR/WinlatorXR#xrapi-03-specification" id="user-content-xrapi-03-specification" aria-label="Permalink: XrAPI 0.3 specification"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a>
-		<p>
-			The Windows app/game has to sent data on localhost:7278 as string of float numbers separated by space:
-		</p>
 	</div>
-	<div>
-		<span class="code">L_HAPTICS, R_HAPTICS, MODE_VR, MODE_3D, HMD_FOVX, HMD_FOVY
-		</span>
-	</div>
-	<ul>
-		<li>
-			The haptic values indicates length in frames how long should controller vibrate (the first value is for left controller and the second for the right one).
-		</li>
-		<li>
-			The VR mode is 1 to enable, 0 to disable. To receive HMD and controllers data, the VR mode has to be enabled.
-		</li>
-		<li>
-			The 3D mode is 2 for alternate-eye-rendering, 1 for side-by-side, 0 for flat screen, -1 to give user the control.
-		</li>
-		<li>
-			If FOV values are higher than 1 then it forces a custom Field-of-View values in degrees. This is need by apps and games where the variable FOV isn't supported.
-		</li>
-	</ul>
-	<p>
-		3D modes:
-	</p>
-	<ul>
-		<li>
-			alternate-eye-rendering - set blue framesync pixel to 0 when rendering left eye, 255 when rendering right eye, quickly swapping left and right eye brings 3D effect
-		</li>
-		<li>
-			side-by-side - the left half of the container is drawn to left eye and right half to right eye
-		</li>
-	</ul>
-	<p>
-		The data transfered over UDP starts with an array of float numbers separated by space, the values are:
-	</p>
-	<div>
-		<span class="code">L_QX, L_QY, L_QZ, L_QW, L_THUMBSTICK_X, L_THUMBSTICK_Y, L_X, L_Y, L_Z, 
-		R_QX, R_QY, R_QZ, R_QW, R_THUMBSTICK_X, R_THUMBSTICK_Y, R_X, R_Y, R_Z, 
-		HMD_QX, HMD_QY, HMD_QZ, HMD_QW, HMD_X, HMD_Y, HMD_Z, HMD_IPD, HMD_FOVX, HMD_FOVY, HMD_SYNC
-		</span>
-	</div>
-	<p>
-		Next is a string containing characters T (for TRUE) and F (for FALSE). This string represents the controller buttons in order:
-	</p>
-	<div>
-		<span class="code">L_GRIP, L_MENU, L_THUMBSTICK_PRESS, L_THUMBSTICK_LEFT, L_THUMBSTICK_RIGHT, L_THUMBSTICK_UP, L_THUMBSTICK_DOWN, L_TRIGGER, L_X, L_Y,
-		R_A, R_B, R_GRIP, R_THUMBSTICK_PRESS, R_THUMBSTICK_LEFT, R_THUMBSTICK_RIGHT, R_THUMBSTICK_UP, R_THUMBSTICK_DOWN, R_TRIGGER
-		</span>
-	</div>
-	<p>
-		Next is a string containing characters T (for TRUE) and F (for FALSE). This string represents the XR flags in order:
-	</p>
-	<div>
-		<span class="code">Immersive, SBS
-		</span>
-	</div>
+	<h3>Outgoing UDP Data (Windows App → WinlatorXR)</h3>
+	<p>The Windows app/game has to sent data on localhost:7278 as string of float numbers separated by space:</p>
+	<center><table>
+	  <tr>
+	    <th>Field</th><th>Type</th><th>Description</th>
+	  </tr>
+	  <tr>
+	    <td>L_HAPTICS</td><td>Float</td><td>Left controller vibration duration (frames)</td>
+	  </tr>
+	  <tr>
+	    <td>R_HAPTICS</td><td>Float</td><td>Right controller vibration duration (frames)</td>
+	  </tr>
+	  <tr>
+	    <td>MODE_VR</td><td>Integer</td><td>1 = Enable VR, 0 = Disable</td>
+	  </tr>
+	  <tr>
+	    <td>MODE_3D</td><td>Integer</td><td>0 = No 3D, 1 = SBS, 2 = AER, -1 = User controlled</td>
+	  </tr>
+	  <tr>
+	    <td>HMD_FOVX</td><td>Float</td><td>Custom horizontal FOV (degrees, if > 1)</td>
+	  </tr>
+	  <tr>
+	    <td>HMD_FOVY</td><td>Float</td><td>Custom vertical FOV (degrees, if > 1)</td>
+	  </tr>
+	</table></center>
+    <br/>
+
+    <p>3D mode defines which method is going to be used to render stereoscopic frames</p>
+	<center><table>
+	<tr>
+		<th>3D Mode</th><th>Description</th>
+	</tr>
+	<tr>
+		<td><strong>Side-by-Side (SBS)</strong></td>
+		<td>
+		The left half of the rendered frame is displayed to the left eye,
+		and the right half is displayed to the right eye.
+		</td>
+	</tr>
+	<tr>
+		<td><strong>Alternate Eye Rendering (AER)</strong></td>
+		<td>Set the blue frame sync pixel to: 0 when rendering the left eye, 255 when rendering the right eye<br/>
+		Rapidly alternating between left and right frames creates the stereoscopic 3D effect.
+		</td>
+	</tr>
+	<tr>
+		<td><strong>User controlled</strong></td>
+		<td>User can select in XR settings whenever SBS or flat mode should be used.</td>
+	</tr>
+	</table></center>
+
+	<h3>Incoming UDP Data (WinlatorXR → Windows App)</h3>
+	<p>WinlatorXR provides data on localhost:7872 as string separated by space:</p>
+
+	<center><table>
+		<tr>
+			<th>Section</th><th>Fields</th><th>Description</th>
+		</tr>
+
+		<tr>
+			<td><strong>Float Array</strong></td>
+			<td valign="top">
+			<strong>Left Controller</strong><br>
+			L_QX, L_QY, L_QZ, L_QW<br>
+			L_THUMBSTICK_X, L_THUMBSTICK_Y<br>
+			L_X, L_Y, L_Z<br><br>
+
+			<strong>Right Controller</strong><br>
+			R_QX, R_QY, R_QZ, R_QW<br>
+			R_THUMBSTICK_X, R_THUMBSTICK_Y<br>
+			R_X, R_Y, R_Z<br><br>
+
+			<strong>Headset (HMD)</strong><br>
+			HMD_QX, HMD_QY, HMD_QZ, HMD_QW<br>
+			HMD_X, HMD_Y, HMD_Z<br>
+			HMD_IPD, HMD_FOVX, HMD_FOVY, HMD_SYNC
+			</td>
+			<td valign="top">
+			Space-separated float values representing full 6DOF tracking data.<br><br>
+			• QX/QY/QZ/QW = Quaternion rotation<br>
+			• X/Y/Z = Position in 3D space<br>
+			• THUMBSTICK_X/Y = Analog input values<br>
+			• HMD_IPD = Interpupillary distance<br>
+			• HMD_SYNC = Frame synchronization value
+			</td>
+		</tr>
+
+		<tr>
+			<td><strong>Boolean States</strong></td>
+			<td valign="top">
+			<strong>Left Controller</strong><br>
+			L_GRIP, L_MENU, L_THUMBSTICK_PRESS<br>
+			L_THUMBSTICK_LEFT, L_THUMBSTICK_RIGHT<br>
+			L_THUMBSTICK_UP, L_THUMBSTICK_DOWN<br>
+			L_TRIGGER, L_X, L_Y<br><br>
+
+			<strong>Right Controller</strong><br>
+			R_A, R_B, R_GRIP<br>
+			R_THUMBSTICK_PRESS<br>
+			R_THUMBSTICK_LEFT, R_THUMBSTICK_RIGHT<br>
+			R_THUMBSTICK_UP, R_THUMBSTICK_DOWN<br>
+			R_TRIGGER
+			</td>
+			<td valign="top">
+			Boolean string containing characters:<br>
+			<strong>T</strong> = TRUE<br>
+			<strong>F</strong> = FALSE<br><br>
+			Values are transmitted in the exact order shown.
+			</td>
+		</tr>
+
+		<tr>
+			<td><strong>Boolean States</strong></td>
+			<td valign="top">Immersive, SBS</td>
+			<td valign="top">
+			Boolean string containing characters:<br>
+			<strong>T</strong> = TRUE<br>
+			<strong>F</strong> = FALSE<br><br>
+			<strong>Immersive</strong> – Fully immersive VR mode active<br>
+			<strong>SBS</strong> – Side-by-side rendering enabled
+			</td>
+		</tr>
+
+	</table></center>
+
 	<div>
 		<h2 class="heading-element" tabindex="-1">
 			Code examples
 		</h2>
-		<a class="anchor" target="_blank" rel="noopener noreferrer" href="https://github.com/WinlatorXR/WinlatorXR#code-examples" id="user-content-code-examples" aria-label="Permalink: Code examples"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a>
 	</div>
 	<ul>
 		<li>
@@ -148,7 +220,6 @@
 		<h2 class="heading-element" tabindex="-1">
 			Code tools
 		</h2>
-		<a class="anchor" target="_blank" rel="noopener noreferrer" href="https://github.com/WinlatorXR/WinlatorXR#code-tools" id="user-content-code-tools" aria-label="Permalink: Code tools"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a>
 	</div>
 	<ul>
 		<li>

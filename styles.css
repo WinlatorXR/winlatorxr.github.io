@@ -4,7 +4,7 @@ html, body {
     background-color:#2F0B81;
 }
 
-a, h1, h2, h3, li, p {
+a, h1, h2, h3, li, p, td, th {
     color: #FFFFFF;
 }
 
@@ -23,6 +23,12 @@ nav a {
     font-size: 1.5rem;
     line-height: 1.5;
     margin: 1.25rem;
+}
+
+center td, th {
+  border: 1px solid #d0d7de;
+  padding: 8px;
+  vertical-align: top;
 }
 
 .container {
