@@ -9,8 +9,10 @@ a, h1, h2, h3, li, p, td, th {
 }
 
 iframe {
-    width: 95%;
+    width: 98%;
     height: 89vh;
+    padding-left: 1%;
+    padding-right: 1%;
     border: none;
 }
 
