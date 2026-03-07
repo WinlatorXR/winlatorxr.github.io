@@ -176,5 +176,9 @@ body.mobile nav {
 }
 
 body.mobile #menuToggle:checked ~ nav {
-  max-height: 400px;
+  max-height: 90vh;
+}
+
+.mobile .nav-links a {
+  font-size: 40pt;
 }
