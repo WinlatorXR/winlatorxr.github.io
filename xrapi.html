@@ -61,7 +61,7 @@
 
 	<div>
 		<h2 class="heading-element" tabindex="-1">
-			XrAPI 0.3 specification
+			XrAPI 0.4 specification
 		</h2>
 	</div>
 	<h3>Outgoing UDP Data (Windows App → WinlatorXR)</h3>
@@ -71,13 +71,17 @@
 	    <th>Field</th><th>Type</th><th>Description</th>
 	  </tr>
 	  <tr>
-	    <td>L_HAPTICS</td><td>Float</td><td>Left controller vibration duration (frames)</td>
+	    <td>L_HAPTICS</td><td>Float</td><td>Left controller vibration duration (frames), this will be forwarded to bHaptics/ProTube accessory arm accessory (if available)</td>
 	  </tr>
 	  <tr>
-	    <td>R_HAPTICS</td><td>Float</td><td>Right controller vibration duration (frames)</td>
+	    <td>R_HAPTICS</td><td>Float</td><td>Right controller vibration duration (frames), this will be forwarded to bHaptics/ProTube accessory arm accessory (if available)</td>
 	  </tr>
 	  <tr>
-	    <td>MODE_VR</td><td>Integer</td><td>0 = Disable (no UDP data are sent), 1 = Enable VR, 2 = Screen mode</td>
+	    <td>MODE_VR</td><td>Integer</td>
+	    <td>
+	      0 = Disable (no UDP data are sent), 1 = Enable VR, 2 = Screen mode (no automatic head tracking)<br/>
+	      3 = Screen mode with head tracking mapped to mouse in 3DoF immersive mode
+	    </td>
 	  </tr>
 	  <tr>
 	    <td>MODE_3D</td><td>Integer</td><td>0 = No 3D, 1 = SBS, 2 = AER, -1 = User controlled</td>
@@ -116,7 +120,7 @@
 	</table></center><br/><br/>
 
 	<h3>Incoming UDP Data (WinlatorXR → Windows App)</h3>
-	<p>WinlatorXR provides data on localhost:7872 as string separated by space:</p>
+	<p>WinlatorXR provides data on localhost:7872 (or localhost:7873 if second instance needed) as a string separated by space:</p>
 
 	<center><table>
 		<tr>
