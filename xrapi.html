@@ -50,7 +50,7 @@
 			Windows app have to render value of HMD_SYNC as shade of red (in sRGB colorspace) into top-left corner.
 		</li>
 		<li>
-			Information about used headset is written into Z:\tmp\xr\system (manufacturer, product, Android version, security patch version).
+			Information about used headset is written into Z:\tmp\xr\system (manufacturer, product, Android version, security patch version and virtual screen resolution).
 		</li>
 	</ol>
 
@@ -61,10 +61,10 @@
 
 	<div>
 		<h2 class="heading-element" tabindex="-1">
-			XrAPI 0.4 specification
+			XrAPI 0.5 specification
 		</h2>
 	</div>
-	<h3>Outgoing UDP Data (Windows App → WinlatorXR)</h3>
+	<h3>Outgoing UDP Data (Windows App → WinlatorXR) for XR state</h3>
 	<p>The Windows app/game has to sent data on localhost:7278 as string of float numbers separated by space:</p>
 	<center><table>
 	  <tr>
@@ -118,6 +118,31 @@
 		<td>User can select in XR settings whenever SBS or flat mode should be used.</td>
 	</tr>
 	</table></center><br/><br/>
+
+	<h3>Optional outgoing UDP Data (Windows App → WinlatorXR) for XServer input simulation</h3>
+	<p>The Windows app/game could sent data on localhost:7728 as string of codes separated by commas to simulate an input</p>
+	<center><table>
+    <tr>
+        <th>Field</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td><code>K</code></td>
+        <td>Array of integers</td>
+        <td>XServer keycodes separated by comma which should be simulated to press<br/>
+			The full list of supported keycodes could be found <a href="https://github.com/WinlatorXR/WinlatorXR/blob/c8fbecb49ec05e9093c1fe404ca98decea95b600/app/src/main/java/com/winlator/cmod/xserver/XKeycode.java" target="_blank" rel="noopener noreferrer">here</a>.<br/><br/>
+			Eg: "K,50,38" presses SHIFT_L and A at the same time</td>
+    </tr>
+    <tr>
+        <td><code>M</code></td>
+        <td>Array of booleans</td>
+        <td>Ones and zeros separated by comma representing state of the mouse buttons in order:<br/>
+			BUTTON_LEFT, BUTTON_RIGHT, BUTTON_MIDDLE, BUTTON_SCROLL_UP, BUTTON_SCROLL_DOWN.<br/><br/>
+
+			Eg: "M,1,0,0,0,0" triggers left mouse click</td>
+    </tr>
+	</table></center>
 
 	<h3>Incoming UDP Data (WinlatorXR → Windows App)</h3>
 	<p>WinlatorXR provides data on localhost:7872 (or localhost:7873 if second instance needed) as a string separated by space:</p>
@@ -191,6 +216,24 @@
 			</td>
 		</tr>
 
+		<tr>
+			<td><strong>Float Array</strong></td>
+			<td valign="top">
+			<strong>Headset (HMD)</strong><br>
+			HMD_ALTITUDE<br><br>
+			<strong>Left Controller</strong><br>
+			LG_QX, LG_QY, LG_QZ, LG_QW<br><br>
+
+			<strong>Right Controller</strong><br>
+			RG_QX, RG_QY, RG_QZ, RG_QW<br><br>
+			</td>
+			<td valign="top">
+			Space-separated float values representing additional 6DOF tracking data.<br><br>
+			* HMD_ALTITUDE = Height between detected floor and headset start tracking position<br><br>
+			• LG/RG = Left/right controller grip pose, this pose is oriented upwards<br>
+			• QX/QY/QZ/QW = Quaternion rotation
+			</td>
+		</tr>
 	</table></center>
 
 	<div>
