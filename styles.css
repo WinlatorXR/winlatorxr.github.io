@@ -291,3 +291,10 @@ body.mobile .rightfloatpanel {
     transition: transform 0.4s ease-in-out;
     z-index: 1000;
 }
+
+iframe.gdrive {
+    position: relative;
+    z-index: 1001;
+    width: 100%;
+    border: none;
+}
