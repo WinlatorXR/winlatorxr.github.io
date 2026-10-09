@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://www.w3.org/2005/10/profile">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <meta http-equiv="Content-Language" content="en" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="author" content="WinlatorXR" />
+  <meta name="description" content="WinlatorXR" />
+  <meta name="robots" content="index,nofollow" />
+  <meta name="copyright" content="WinlatorXR" />
+  <link rel="stylesheet" href="styles.css">
+  <title>WinlatorXR</title>
+</head>
+<body>
+	<script src="scripts.js" defer></script>
+	<div>
+		<h2 class="heading-element" tabindex="-1">
+			XrAPI 0.5 specification
+		</h2>
+	</div>
+	<h3>Outgoing UDP Data (Windows App → WinlatorXR) for XR state</h3>
+	<p>The Windows app/game has to sent data on localhost:7278 as string of float numbers separated by space:</p>
+	<center><table>
+	  <tr>
+	    <th>Field</th><th>Type</th><th>Description</th>
+	  </tr>
+	  <tr>
+	    <td>L_HAPTICS</td><td>Float</td><td>Left controller vibration duration (frames), this will be forwarded to bHaptics/ProTube accessory arm accessory (if available)</td>
+	  </tr>
+	  <tr>
+	    <td>R_HAPTICS</td><td>Float</td><td>Right controller vibration duration (frames), this will be forwarded to bHaptics/ProTube accessory arm accessory (if available)</td>
+	  </tr>
+	  <tr>
+	    <td>MODE_VR</td><td>Integer</td>
+	    <td>
+	      0 = Disable (no UDP data are sent), 1 = Enable VR, 2 = Screen mode (no automatic head tracking)<br/>
+	      3 = Screen mode with head tracking mapped to mouse in 3DoF immersive mode
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>MODE_3D</td><td>Integer</td><td>0 = No 3D, 1 = SBS, 2 = AER, -1 = User controlled</td>
+	  </tr>
+	  <tr>
+	    <td>HMD_FOVX</td><td>Float</td><td>Custom horizontal FOV (degrees, if > 1)</td>
+	  </tr>
+	  <tr>
+	    <td>HMD_FOVY</td><td>Float</td><td>Custom vertical FOV (degrees, if > 1)</td>
+	  </tr>
+	</table></center>
+    <br/>
+
+    <p>3D mode defines which method is going to be used to render stereoscopic frames</p>
+	<center><table>
+	<tr>
+		<th>3D Mode</th><th>Description</th>
+	</tr>
+	<tr>
+		<td><strong>Side-by-Side (SBS)</strong></td>
+		<td>
+		The left half of the rendered frame is displayed to the left eye,
+		and the right half is displayed to the right eye.
+		</td>
+	</tr>
+	<tr>
+		<td><strong>Alternate Eye Rendering (AER)</strong></td>
+		<td>Set the blue frame sync pixel to: 0 when rendering the left eye, 255 when rendering the right eye<br/>
+		Rapidly alternating between left and right frames creates the stereoscopic 3D effect.
+		</td>
+	</tr>
+	<tr>
+		<td><strong>User controlled</strong></td>
+		<td>User can select in XR settings whenever SBS or flat mode should be used.</td>
+	</tr>
+	</table></center><br/><br/>
+
+	<h3>Optional outgoing UDP Data (Windows App → WinlatorXR) for XServer input simulation</h3>
+	<p>The Windows app/game could sent data on localhost:7728 as string of codes separated by commas to simulate an input</p>
+	<center><table>
+    <tr>
+        <th>Field</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td><code>K</code></td>
+        <td>Array of integers</td>
+        <td>XServer keycodes separated by comma which should be simulated to press<br/>
+			The full list of supported keycodes could be found <a href="https://github.com/WinlatorXR/WinlatorXR/blob/c8fbecb49ec05e9093c1fe404ca98decea95b600/app/src/main/java/com/winlator/cmod/xserver/XKeycode.java" target="_blank" rel="noopener noreferrer">here</a>.<br/><br/>
+			Eg: "K,50,38" presses SHIFT_L and A at the same time</td>
+    </tr>
+    <tr>
+        <td><code>M</code></td>
+        <td>Array of booleans</td>
+        <td>Ones and zeros separated by comma representing state of the mouse buttons in order:<br/>
+			BUTTON_LEFT, BUTTON_RIGHT, BUTTON_MIDDLE, BUTTON_SCROLL_UP, BUTTON_SCROLL_DOWN.<br/><br/>
+
+			Eg: "M,1,0,0,0,0" triggers left mouse click</td>
+    </tr>
+	</table></center>
+
+	<h3>Incoming UDP Data (WinlatorXR → Windows App)</h3>
+	<p>WinlatorXR provides data on localhost:7872 (or localhost:7873 if second instance needed) as a string separated by space:</p>
+
+	<center><table>
+		<tr>
+			<th>Section</th><th>Fields</th><th>Description</th>
+		</tr>
+
+		<tr>
+			<td><strong>Float Array</strong></td>
+			<td valign="top">
+			<strong>Left Controller</strong><br>
+			L_QX, L_QY, L_QZ, L_QW<br>
+			L_THUMBSTICK_X, L_THUMBSTICK_Y<br>
+			L_X, L_Y, L_Z<br><br>
+
+			<strong>Right Controller</strong><br>
+			R_QX, R_QY, R_QZ, R_QW<br>
+			R_THUMBSTICK_X, R_THUMBSTICK_Y<br>
+			R_X, R_Y, R_Z<br><br>
+
+			<strong>Headset (HMD)</strong><br>
+			HMD_QX, HMD_QY, HMD_QZ, HMD_QW<br>
+			HMD_X, HMD_Y, HMD_Z<br>
+			HMD_IPD, HMD_FOVX, HMD_FOVY, HMD_SYNC
+			</td>
+			<td valign="top">
+			Space-separated float values representing full 6DOF tracking data.<br><br>
+			• QX/QY/QZ/QW = Quaternion rotation<br>
+			• X/Y/Z = Position in 3D space<br>
+			• THUMBSTICK_X/Y = Analog input values<br>
+			• HMD_IPD = Interpupillary distance<br>
+			• HMD_SYNC = Frame synchronization value
+			</td>
+		</tr>
+
+		<tr>
+			<td><strong>Boolean States</strong></td>
+			<td valign="top">
+			<strong>Left Controller</strong><br>
+			L_GRIP, L_MENU, L_THUMBSTICK_PRESS<br>
+			L_THUMBSTICK_LEFT, L_THUMBSTICK_RIGHT<br>
+			L_THUMBSTICK_UP, L_THUMBSTICK_DOWN<br>
+			L_TRIGGER, L_X, L_Y<br><br>
+
+			<strong>Right Controller</strong><br>
+			R_A, R_B, R_GRIP<br>
+			R_THUMBSTICK_PRESS<br>
+			R_THUMBSTICK_LEFT, R_THUMBSTICK_RIGHT<br>
+			R_THUMBSTICK_UP, R_THUMBSTICK_DOWN<br>
+			R_TRIGGER
+			</td>
+			<td valign="top">
+			Boolean string containing characters:<br>
+			<strong>T</strong> = TRUE<br>
+			<strong>F</strong> = FALSE<br><br>
+			Values are transmitted in the exact order shown.
+			</td>
+		</tr>
+
+		<tr>
+			<td><strong>Float Array</strong></td>
+			<td valign="top">
+			<strong>Headset (HMD)</strong><br>
+			HMD_ALTITUDE<br><br>
+			<strong>Left Controller</strong><br>
+			LG_QX, LG_QY, LG_QZ, LG_QW<br><br>
+
+			<strong>Right Controller</strong><br>
+			RG_QX, RG_QY, RG_QZ, RG_QW<br><br>
+			</td>
+			<td valign="top">
+			Space-separated float values representing additional 6DOF tracking data.<br><br>
+			* HMD_ALTITUDE = Height between detected floor and headset start tracking position<br><br>
+			• LG/RG = Left/right controller grip pose, this pose is oriented upwards<br>
+			• QX/QY/QZ/QW = Quaternion rotation
+			</td>
+		</tr>
+
+		<tr>
+			<td><strong>Boolean States</strong></td>
+			<td valign="top">Immersive, SBS</td>
+			<td valign="top">
+			Boolean string containing characters:<br>
+			<strong>T</strong> = TRUE<br>
+			<strong>F</strong> = FALSE<br><br>
+			<strong>Immersive</strong> – 3DoF immersive mode active<br>
+			<strong>SBS</strong> – Side-by-side rendering enabled
+			</td>
+		</tr>
+	</table></center>
+</body>
+</html>

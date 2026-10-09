@@ -1,22 +1,21 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head profile="http://www.w3.org/2005/10/profile">
-  <link rel="icon" type="image/png" href="img/favicon.png">
-  <meta http-equiv="Content-Language" content="en" />
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="author" content="WinlatorXR" />
-  <meta name="description" content="WinlatorXR" />
-  <meta name="robots" content="index,nofollow" />
-  <meta name="copyright" content="WinlatorXR" />
-  <link rel="stylesheet" href="styles.css">
-  <title>WinlatorXR</title>
-  <script src="scripts/compatsearch.js"></script> 
+	<link rel="icon" type="image/png" href="img/favicon.png">
+	<meta http-equiv="Content-Language" content="en" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="author" content="WinlatorXR" />
+	<meta name="description" content="WinlatorXR" />
+	<meta name="robots" content="index,nofollow" />
+	<meta name="copyright" content="WinlatorXR" />
+	<link rel="stylesheet" href="styles.css">
+	<title>WinlatorXR</title>
+	<script src="scripts/compatsearch.js"></script>
 </head>
 <body>
-  <script src="scripts.js" defer></script>
-  <h2>
-    Games and Apps tested so far with WinlatorXR:
-	</h2>
+	<script src="scripts.js" defer></script>
+
+	<h2>Games and Apps tested so far with WinlatorXR:</h2>
 	<p style="width:60%">
 		Note: "Works" is a term that is fairly flexible here and still assumes that <u><strong>you will need to tweak the container settings sometimes on a per-app basis</strong></u> to get the best performance, and may still encounter crashes, lag spikes, or sound issues at some point(s) during gameplay.
 	</p>
@@ -40,9 +39,8 @@
 		</div>
 	</div>
 	<div class="clear"></div>
-	<h2>
-		Some apps are very useful inside of Winlator containers as well:
-	</h2>
+
+	<h2>Some apps are very useful inside of Winlator containers as well:</h2>
 	<input type="text" id="appMatrixInput" class="matrixsearch" onkeyup="searchMatrix('appMatrixInput', 'appMatrix')" placeholder="Search for an app...">
 	<div id="genTableAppMatrix"></div>
 	<script type="text/javascript">
@@ -50,5 +48,8 @@
 		createTableFromJson('applist.json','genTableAppMatrix','appMatrix');
 		updateCompatNotes();
 	</script>
+
+	<h2>PCVR games compatibility list:</h2>
+	<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTyeeIcGB5KaOoA_pZ6r6X3bS9e3tUz5KRNK8zxVhV0Pi7aBmwri-uHEQKdplYFI0uREwKGxFdpflyr/pubhtml?gid=0&single=true" width="100%" frameborder="0"/>
 </body>
 </html>

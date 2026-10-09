@@ -61,7 +61,7 @@
 
 	<div>
 		<h2 class="heading-element" tabindex="-1">
-			XrAPI 0.5 specification
+			XrAPI 0.6 specification
 		</h2>
 	</div>
 	<h3>Outgoing UDP Data (Windows App → WinlatorXR) for XR state</h3>
@@ -92,7 +92,65 @@
 	  <tr>
 	    <td>HMD_FOVY</td><td>Float</td><td>Custom vertical FOV (degrees, if > 1)</td>
 	  </tr>
+
+	  <tr>
+	    <td>Reference space count</td><td>Integer</td><td>Size of following array</td>
+	  </tr>
+	  <tr>
+	    <td>Reference space data</td>
+	    <td>
+			<strong>Space metadata</strong><br>
+			Space index, Space type<br><br>
+			<strong>Reference pose</strong><br>
+			X, Y, Z, QX, QY, QZ, QW<br>
+	    </td>
+	    <td>
+			Reference spaces have to be defined to be able to track headset and controllers<br>
+			Space index is defined by user (it cannot collide with controller index)<br>
+			Space type is defined by OpenXR's <a target="_blank" rel="noopener noreferrer" href="https://registry.khronos.org/OpenXR/specs/1.0/man/html/XrReferenceSpaceType.html">XrReferenceSpaceType</a><br><br>
+			Space-separated float values representing 6DOF reference pose (usually identity pose).<br>
+			• X/Y/Z = Position in 3D space<br>
+			• QX/QY/QZ/QW = Quaternion rotation<br>
+	    </td>
+	  </tr>
+
+	  <tr>
+	    <td>Controller count</td><td>Integer</td><td>Size of following array</td>
+	  </tr>
+	  <tr>
+	    <td>Controller data</td>
+	    <td>
+			<strong>Controller metadata</strong><br>
+			Space index, Controller type, Controller grip<br><br>
+			<strong>Reference pose</strong><br>
+			X, Y, Z, QX, QY, QZ, QW<br>
+	    </td>
+	    <td>
+			Controller are defined by action spaces and have to be defined to be able to track the controllers<br>
+			Space index is defined by user (it cannot collide with reference space index)<br>
+			Controller type is 1 for left hand and 2 for right hand<br>
+			Controller grip is 0 for aim pose and 1 for grip pose<br><br>
+			Space-separated float values representing 6DOF reference pose (usually identity pose).<br>
+			• X/Y/Z = Position in 3D space<br>
+			• QX/QY/QZ/QW = Quaternion rotation<br>
+	    </td>
+	  </tr>
+
+	  <tr>
+	    <td>Locate space count</td><td>Integer</td><td>Size of following array</td>
+	  </tr>
+	  <tr>
+	    <td>Locate space request</td>
+	    <td>Space index, Base space index</td>
+	    <td>
+			This will fill requests for space poses to be located. This is implementation of OpenXR's <a target="_blank" rel="noopener noreferrer"  href="https://registry.khronos.org/OpenXR/specs/1.1/man/html/xrLocateSpace.html">xrLocateSpace</a><br>
+			Space index is index of controller action space (defined above) or 0 to track the headset.<br>
+			Base space is index is the reference space (defined above) in which coordinate system should the output pose be.
+	    </td>
+	  </tr>
 	</table></center>
+
+	<p>It is recommended to not send always all the data. The message could be shorter e.g. when sending haptics only "0 1" could be sent.</p>
     <br/>
 
     <p>3D mode defines which method is going to be used to render stereoscopic frames</p>
@@ -118,6 +176,11 @@
 		<td>User can select in XR settings whenever SBS or flat mode should be used.</td>
 	</tr>
 	</table></center><br/><br/>
+
+	<center>
+	<img width="50%" src="img/openxr_spaces.png"><br/>
+	<p>Reference spaces explained by <a target="_blank" rel="noopener noreferrer" href="https://openxr-tutorial.com/linux/vulkan/3-graphics.html">openxr-tutorial.com</a></p>
+	</center><br/><br/>
 
 	<h3>Optional outgoing UDP Data (Windows App → WinlatorXR) for XServer input simulation</h3>
 	<p>The Windows app/game could sent data on localhost:7728 as string of codes separated by commas to simulate an input</p>
@@ -155,28 +218,30 @@
 		<tr>
 			<td><strong>Float Array</strong></td>
 			<td valign="top">
-			<strong>Left Controller</strong><br>
-			L_QX, L_QY, L_QZ, L_QW<br>
-			L_THUMBSTICK_X, L_THUMBSTICK_Y<br>
-			L_X, L_Y, L_Z<br><br>
+			<strong>Left controller thumbstick</strong><br>
+			L_THUMBSTICK_X, L_THUMBSTICK_Y<br><br>
 
-			<strong>Right Controller</strong><br>
-			R_QX, R_QY, R_QZ, R_QW<br>
-			R_THUMBSTICK_X, R_THUMBSTICK_Y<br>
-			R_X, R_Y, R_Z<br><br>
+			<strong>Right controller thumbstick</strong><br>
+			R_THUMBSTICK_X, R_THUMBSTICK_Y<br><br>
+
+			<strong>Left controller pedal buttons</strong><br>
+			L_TRIGGER, L_SQUEEZE<br><br>
+
+			<strong>Right controller pedal buttons</strong><br>
+			R_TRIGGER, R_SQUEEZE<br><br>
 
 			<strong>Headset (HMD)</strong><br>
-			HMD_QX, HMD_QY, HMD_QZ, HMD_QW<br>
-			HMD_X, HMD_Y, HMD_Z<br>
-			HMD_IPD, HMD_FOVX, HMD_FOVY, HMD_SYNC
+			HMD_IPD, HMD_FOVX, HMD_FOVY, HMD_SYNC, HMD_RECENTER
 			</td>
 			<td valign="top">
-			Space-separated float values representing full 6DOF tracking data.<br><br>
-			• QX/QY/QZ/QW = Quaternion rotation<br>
-			• X/Y/Z = Position in 3D space<br>
+			Space-separated float values.<br><br>
 			• THUMBSTICK_X/Y = Analog input values<br>
+			• TRIGGER = Analog input value for trigger button<br>
+			• SQUEEZE = Analog input value for grip button<br>
 			• HMD_IPD = Interpupillary distance<br>
-			• HMD_SYNC = Frame synchronization value
+			• HMD_FPS = Per frame updated frames per second<br>
+			• HMD_SYNC = Frame synchronization value<br>
+			* HMD_RECENTER = Count how many times recenter was called
 			</td>
 		</tr>
 
@@ -205,21 +270,37 @@
 		</tr>
 
 		<tr>
-			<td><strong>Float Array</strong></td>
+			<td><strong>Int number</strong></td>
 			<td valign="top">
-			<strong>Headset (HMD)</strong><br>
-			HMD_ALTITUDE<br><br>
-			<strong>Left Controller</strong><br>
-			LG_QX, LG_QY, LG_QZ, LG_QW<br><br>
-
-			<strong>Right Controller</strong><br>
-			RG_QX, RG_QY, RG_QZ, RG_QW<br><br>
+			Count of locate space poses
 			</td>
 			<td valign="top">
-			Space-separated float values representing additional 6DOF tracking data.<br><br>
-			* HMD_ALTITUDE = Height between detected floor and headset start tracking position<br><br>
-			• LG/RG = Left/right controller grip pose, this pose is oriented upwards<br>
-			• QX/QY/QZ/QW = Quaternion rotation
+			The size of locate space array<br><br>
+			</td>
+		</tr>
+
+		<tr>
+			<td><strong>Locate spaces array</strong></td>
+			<td valign="top">
+			<strong>Space indexes</strong><br>
+			Space, Base space<br><br>
+			<strong>Tracked pose</strong><br>
+			X, Y, Z, QX, QY, QZ, QW<br><br>
+
+			<strong>Space velocity</strong><br>
+			velocityFlags<br>
+			linearVelocity (X, Y, Z)<br>
+			angularVelocity (X, Y, Z)<br>
+			</td>
+			<td valign="top">
+			These values are requested measurements of HMD, controllers and floor.<br>
+			Space is an index of a device which is being located (this could be headset or controller)<br>
+			Base space is an index of a coordinate system in which is the pose tracked (it could be relatively to floor, headset, etc.)<br><br>
+			Space-separated float values representing full 6DOF tracking data.<br><br>
+			• X/Y/Z = Position in 3D space<br>
+			• QX/QY/QZ/QW = Quaternion rotation<br><br>
+
+			Space velocity is defined by OpenXR's <a target="_blank" rel="noopener noreferrer" href="https://registry.khronos.org/OpenXR/specs/1.1/man/html/XrSpaceVelocityData.html">XrSpaceVelocityData</a><br><br>
 			</td>
 		</tr>
 
@@ -235,6 +316,17 @@
 			</td>
 		</tr>
 	</table></center>
+
+	<div>
+		<h2 class="heading-element" tabindex="-1">
+			Archived versions of the API
+		</h2>
+	</div>
+	<ul>
+		<li>
+			<a href="xrapi05.html">XrAPI v0.5</a>
+		</li>
+	</ul>
 
 	<div>
 		<h2 class="heading-element" tabindex="-1">
