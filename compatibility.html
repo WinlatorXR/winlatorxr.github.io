@@ -12,10 +12,31 @@
 	<title>WinlatorXR</title>
 	<script src="scripts/compatsearch.js"></script>
 </head>
-<body>
-	<script src="scripts.js" defer></script>
-
-	<h2>Games and Apps tested so far with WinlatorXR:</h2>
+<body style="padding-left:5px;">
+  <script src="scripts.js" defer></script>
+  <div class="show-trigger"></div>
+  <a name="top"></a>
+  <div class="toc-box">
+        <div class="toc-title"><h3>Quick Look:</h3></div>
+        <ul>
+            <li>
+                <a href="#games">Games Compatibility List</a>
+            </li>
+            <li>
+                <a href="#apps">App Compatibility List</a>
+            </li>
+            <li>
+                <a href="#pcvr">PCVR-on-Standalone Compatibility List</a>
+            </li>
+        </ul>
+    </div>
+	<div class="desktoponly compatlink" style="float:right; display: none;padding:20px;"><a href="#" onclick="showTarget('.rightfloatpanel');hideTarget('.compatlink');" class="close-panel-link">Compatibility Notes</a></div>
+  
+	<a name="games"></a>
+	<h2>
+		Games tested so far with WinlatorXR:
+	</h2>
+	<p><u><a href="#top">Back To Top</a></u></p>
 	<p style="width:60%">
 		Note: "Works" is a term that is fairly flexible here and still assumes that <u><strong>you will need to tweak the container settings sometimes on a per-app basis</strong></u> to get the best performance, and may still encounter crashes, lag spikes, or sound issues at some point(s) during gameplay.
 	</p>
@@ -24,7 +45,8 @@
 		<div class="mobileonly"></br></br>
 			<a href="#open-panel" class="open-popup-link">Compatibility Notes</a></br></br>
 		</div>
-	</p>
+	</p>	
+	
 	<div class=floatcontainer">
 		<input type="text" id="gameMatrixInput" class="matrixsearch" onkeyup="searchMatrix('gameMatrixInput', 'gameMatrix')" placeholder="Search for a game...">
 		<div id="genTableGameMatrix"></div>
@@ -35,12 +57,17 @@
 				</h3>
 				<div id="compatnotescontainer"></div>
 				<div class="mobileonly"><a href="#" class="close-panel-button">Close</a></div>
+				<div class="desktoponly"><a href="#" onclick="hideTarget('.rightfloatpanel');showTarget('.compatlink');" class="close-panel-link">Close</a></div>
 			</div>
 		</div>
 	</div>
 	<div class="clear"></div>
-
-	<h2>Some apps are very useful inside of Winlator containers as well:</h2>
+	
+	<a name="apps"></a>
+	<h2>
+		Useful Apps inside of Winlator containers as well:
+	</h2>
+	<p><u><a href="#top">Back To Top</a></u></p>
 	<input type="text" id="appMatrixInput" class="matrixsearch" onkeyup="searchMatrix('appMatrixInput', 'appMatrix')" placeholder="Search for an app...">
 	<div id="genTableAppMatrix"></div>
 	<script type="text/javascript">
@@ -48,8 +75,15 @@
 		createTableFromJson('applist.json','genTableAppMatrix','appMatrix');
 		updateCompatNotes();
 	</script>
-
+	<div class="clear"></div>
+	
+	<a name="pcvr"></a>	
 	<h2>PCVR games compatibility list:</h2>
-	<iframe class="gdrive" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTyeeIcGB5KaOoA_pZ6r6X3bS9e3tUz5KRNK8zxVhV0Pi7aBmwri-uHEQKdplYFI0uREwKGxFdpflyr/pubhtml?gid=0&single=true"/>
+	<p><u><a href="#top">Back To Top</a></u></p>
+	<iframe class="gdrive" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTyeeIcGB5KaOoA_pZ6r6X3bS9e3tUz5KRNK8zxVhV0Pi7aBmwri-uHEQKdplYFI0uREwKGxFdpflyr/pubhtml?gid=0&amp;single=true" data-ruffle-polyfilled="">
+	</body>
+	</html>
+	</iframe>
+	<div class="hide-trigger"></div>
 </body>
 </html>

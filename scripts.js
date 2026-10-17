@@ -19,3 +19,15 @@ document.querySelectorAll("nav a").forEach(link => {
         document.getElementById("menuToggle").checked = false;
     });
 });
+
+function hideTarget(target) {
+	document.querySelectorAll(target).forEach(el => {
+		el.style.display = 'none';
+	});
+}
+
+function showTarget(target) {
+	document.querySelectorAll(target).forEach(el => {
+		el.style.display = '';
+	});
+}

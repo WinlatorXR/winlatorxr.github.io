@@ -195,8 +195,12 @@ body.desktop .nav-links span:not(:last-child)::after {
   margin-left: 6px;
 }
 
+body.desktop .desktoponly {
+	display: block;
+}
+
 body.desktop .mobileonly {
-	display:none;
+	display: none;
 }
 
 body.desktop .rightfloatpanel {
@@ -275,6 +279,10 @@ body.mobile .mobileonly {
     display: block;
 }
 
+body.mobile .desktoponly {
+	display: none;
+}
+
 body.mobile .rightfloatpanel:target {
     transform: translateX(0);
 }
@@ -297,4 +305,16 @@ iframe.gdrive {
     z-index: 1001;
     width: 100%;
     border: none;
+}
+
+.toc-box {
+	background-color: #391d99;
+	margin: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 5px;
+	display: inline-block;
+	min-width: 250px;
+	border-radius: 2px;
+	font-size: 12pt;
 }
